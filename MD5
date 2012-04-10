@@ -1,6 +1,7 @@
-daa6b27b8d130d47165c0f4f36da6974 *DESCRIPTION
-1dc8170ed18e005eb7ca7f79f18a50de *R/GGEBiplot.R
-9a5b51f6268e6ee91c3b704a5a7ee792 *R/GGEBiplotGUI-internal.R
-9f116a71172164ce5dff3adabf210a87 *man/GGEBiplot.Rd
-adde0ba3debb5937d80e06403835eb9f *man/GGEBiplotGUI-internal.Rd
-4ee7b34229357ae4768ca1783dd38b82 *man/GGEBiplotGUI-package.Rd
+73f73f98c3dc687d82c80993a0d05b0a *DESCRIPTION
+df390c53434517b304ac5db487184641 *NAMESPACE
+278c36aec6a3f36cec736c3318330c1b *R/GGEBiplot.R
+d5802889427988ca599fcc2136380ec4 *data/Ontario.rda
+0ff488c7d5c4a5dd20925cc6b3a2ea11 *man/GGEBiplot.Rd
+c8a3aea5149d2d096968ba83c2cffd41 *man/GGEBiplotGUI-package.Rd
+dc7cc374f994ce7329a20f0b8134db9b *man/Ontario.Rd
