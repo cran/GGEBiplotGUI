@@ -17,7 +17,7 @@ function (Data)
     coltitle <- "black"
     background <- "white"
     colenv <- "blue"
-    colgenotype <- "green"
+    colgenotype <- "green4"
     centro <- c(0, 0)
     symbol = NA_integer_
     subtitle <- NULL
@@ -82,31 +82,32 @@ function (Data)
             return(colorv)
     }
     Models <- function() {
-        labelenv <<- array(, ncol(Data) - 1)
-        labelgen <<- array(, nrow(Data))
-        for (i in 1:ncol(Data) - 1) labelenv[i] <<- colnames(Data)[i +
-            1]
         labelgen <<- Data[, 1]
+        labelenv <<- colnames(Data[, -1])
         matrixdata <<- matrix(, nrow(Data), ncol(Data) - 1)
         for (i in 1:nrow(matrixdata)) for (j in 1:ncol(matrixdata)) matrixdata[i,
             j] <<- Data[i, j + 1]
         for (i in 1:ncol(diag(svd(matrixdata)$d))) ejes[i] <<- paste("AXIS",
             i, sep = "")
-        if (optioncentering == "0.No centering") {
+            
+        # Opción de centrado
+            
+        switch(optioncentering,        
+        "0.No centering" = {
             centering <<- tclVar("0")
-        }
-        if (optioncentering == "1.Global-Centered E+G+GE") {
+        },
+        "1.Global-Centered E+G+GE" = {
             meanData <<- mean(matrixdata)
             matrixdata <<- matrixdata - meanData
             centering <<- tclVar("1")
-        }
-        if (optioncentering == "2.Tester-Centered G+GE") {
+        },
+        "2.Tester-Centered G+GE" = {
             meancolData <<- colMeans(matrixdata)
             for (i in 1:nrow(matrixdata)) for (j in 1:ncol(matrixdata)) matrixdata[i,
                 j] <<- matrixdata[i, j] - meancolData[j]
             centering <<- tclVar("2")
-        }
-        if (optioncentering == "3.Double-Centered GE") {
+        },
+        "3.Double-Centered GE" = {
             meanData <<- mean(matrixdata)
             meancolData <<- colMeans(matrixdata)
             meanrowData <<- rowMeans(matrixdata)
@@ -114,19 +115,27 @@ function (Data)
                 j] <<- matrixdata[i, j] + meanData - meancolData[j] -
                 meanrowData[i]
             centering <<- tclVar("3")
-        }
-        if (optionscaling == "0.No scaling") {
+        })
+        
+        # Opción de escalado
+        
+        switch (optionscaling,
+        "0.No scaling" = {
             scaling <<- tclVar("0")
-        }
-        if (optionscaling == "1.Std Deviation (SD)") {
+        },
+        "1.Std Deviation (SD)" = {
             scaling <<- tclVar("1")
             desviation <<- array(, dim = ncol(matrixdata))
             for (j in 1:ncol(matrixdata)) desviation[j] <<- sqrt(var(matrixdata[,
                 j]))
             for (i in 1:nrow(matrixdata)) for (j in 1:ncol(matrixdata)) matrixdata[i,
                 j] <<- matrixdata[i, j]/desviation[j]
-        }
-        if (optionSVP == "JK -(Row Metric Preserving)") {
+        })
+        
+        # Opción de centrado
+        
+        switch (optionSVP,
+        "JK -(Row Metric Preserving)" = {
             coordgenotype <<- svd(matrixdata)$u %*% diag(svd(matrixdata)$d)
             coordenviroment <<- svd(matrixdata)$v
             d1 <<- (max(coordenviroment[, dimension1]) - min(coordenviroment[,
@@ -138,8 +147,8 @@ function (Data)
             d <<- max(d1, d2)
             coordenviroment <<- coordenviroment/d
             svp <<- tclVar("0")
-        }
-        if (optionSVP == "GH -(Column Metric Preserving)") {
+        },
+        "GH -(Column Metric Preserving)" = {
             coordgenotype <<- svd(matrixdata)$u
             coordenviroment <<- svd(matrixdata)$v %*% diag(svd(matrixdata)$d)
             d1 <<- (max(coordgenotype[, dimension1]) - min(coordgenotype[,
@@ -151,17 +160,17 @@ function (Data)
             d <<- max(d1, d2)
             coordgenotype <<- coordgenotype/d
             svp <<- tclVar("1")
-        }
-        if (optionSVP == "SQ - Symmetrical") {
+        },
+        "SQ - Symmetrical" = {
             coordgenotype <<- svd(matrixdata)$u %*% diag(sqrt(svd(matrixdata)$d))
             coordenviroment <<- svd(matrixdata)$v %*% diag(sqrt(svd(matrixdata)$d))
             svp <<- tclVar("3")
-        }
-        if (optionSVP == "HJ -(Dual Metric Preserving)") {
+        },
+        "HJ -(Dual Metric Preserving)" = {
             coordgenotype <<- svd(matrixdata)$u %*% diag(svd(matrixdata)$d)
             coordenviroment <<- svd(matrixdata)$v %*% diag(svd(matrixdata)$d)
             svp <<- tclVar("2")
-        }
+        })
     }
     Addfile <- function() {
         valorespropios <<- svd(matrixdata)$d
@@ -284,17 +293,27 @@ function (Data)
                 "%", sep = " "))
         if (tclvalue(showguidelines) == "1")
             abline(h = 0, v = 0, lty = "dotted")
-        if (TypeGraph == 1) {
+            
+        # Tipo de gráfico
+        #
+        
+        switch(TypeGraph,   
+        
+        # Biplot
+        
+        "1" = {
             if (tclvalue(showboth) == "0" || tclvalue(showboth) ==
-                "1") {
+                "1") 
+                {
                 points(coordgenotype[, dimension1], coordgenotype[,
                   dimension2], pch = symbol, col = colgenotype)
                 text(coordgenotype[, dimension1], coordgenotype[,
                   dimension2], labels = labelgen, col = colgenotype,
                   cex = 1)
-            }
+                }
             if (tclvalue(showboth) == "0" || tclvalue(showboth) ==
-                "2") {
+                "2") 
+                {
                 arrows(centro[1], centro[2], coordenviroment[,
                   dimension1], coordenviroment[, dimension2],
                   col = colenv, lty = "dotted", length = 0.05)
@@ -302,25 +321,29 @@ function (Data)
                 text(coordenviroment[, dimension1], coordenviroment[,
                   dimension2], labels = labelenv, col = colenv,
                   cex = 1)
-            }
-        }
-        if (TypeGraph == 2) {
+                }
+        },
+        
+        # Examina un ambiente
+        
+        "2" = {
             points(coordgenotype[, dimension1], coordgenotype[,
                 dimension2], pch = symbol, col = colgenotype)
             text(coordgenotype[, dimension1], coordgenotype[,
                 dimension2], labels = labelgen, col = colgenotype,
                 cex = 1)
             abline(a = 0, b = coordenviroment[venvironment, dimension2]/coordenviroment[venvironment,
-                dimension1], col = "red", lty = "solid")
+                dimension1], col = "red", lty = "solid",lwd = 2.5)
             abline(a = 0, b = -coordenviroment[venvironment,
                 dimension1]/coordenviroment[venvironment, dimension2],
-                col = "red", lty = "solid")
+                col = "red", lty = "solid",lwd = 2.5)
             arrows(centro[1], centro[2], coordenviroment[venvironment,
                 dimension1], coordenviroment[venvironment, dimension2],
                 col = "red", lty = "solid", length = 0.1)
             text(coordenviroment[venvironment, dimension1], coordenviroment[venvironment,
                 dimension2], labels = labelenv[venvironment], col = "red")
-            for (i in 1:nrow(matrixdata)) {
+            for (i in 1:nrow(matrixdata)) 
+            {
                 x <- solve(matrix(c(-coordenviroment[venvironment,
                   dimension2], coordenviroment[venvironment,
                   dimension1], coordenviroment[venvironment,
@@ -332,23 +355,27 @@ function (Data)
                 segments(coordgenotype[i, dimension1], coordgenotype[i,
                   dimension2], x[1], x[2], lty = "dotted")
             }
-        }
-        if (TypeGraph == 3) {
+        },
+        
+        # Examina un genotipo
+                
+        "3" = {
             points(coordenviroment[, dimension1], coordenviroment[,
                 dimension2], pch = symbol, col = colenv)
             text(coordenviroment[, dimension1], coordenviroment[,
                 dimension2], labels = labelenv, col = colenv,
                 cex = 1)
             abline(a = 0, b = coordgenotype[vgenotype, dimension2]/coordgenotype[vgenotype,
-                dimension1], col = "red", lty = "solid")
+                dimension1], col = "red", lty = "solid" , lwd = 2.5)
             abline(a = 0, b = -coordgenotype[vgenotype, dimension1]/coordgenotype[vgenotype,
-                dimension2], col = "red", lty = "solid")
+                dimension2], col = "red", lty = "solid", lwd = 2.5 )
             arrows(centro[1], centro[2], coordgenotype[vgenotype,
                 dimension1], coordgenotype[vgenotype, dimension2],
                 col = "red", lty = "solid", length = 0.1)
             text(coordgenotype[vgenotype, dimension1], coordgenotype[vgenotype,
                 dimension2], labels = labelgen[vgenotype], col = "red")
-            for (i in 1:ncol(matrixdata)) {
+            for (i in 1:ncol(matrixdata)) 
+            {
                 x <- solve(matrix(c(-coordgenotype[vgenotype,
                   dimension2], coordgenotype[vgenotype, dimension1],
                   coordgenotype[vgenotype, dimension1], coordgenotype[vgenotype,
@@ -359,8 +386,11 @@ function (Data)
                 segments(coordenviroment[i, dimension1], coordenviroment[i,
                   dimension2], x[1], x[2], lty = "dotted")
             }
-        }
-        if (TypeGraph == 4) {
+        },              
+        
+        # Relación entre ambientes
+        
+        "4" = {
             text(coordgenotype[, dimension1], coordgenotype[,
                 dimension2], labels = labelgen, col = colgenotype,
                 cex = 1)
@@ -371,15 +401,19 @@ function (Data)
             text(coordenviroment[, dimension1], coordenviroment[,
                 dimension2], labels = labelenv, col = colenv,
                 cex = 1)
-            if (tclvalue(showcircles) == "1") {
+            if (tclvalue(showcircles) == "1") 
+            {
                 radio <<- max((max(coordenviroment[dimension1,
                   ]) - min(coordenviroment[dimension1, ])), (max(coordenviroment[dimension2,
                   ]) - min(coordenviroment[dimension2, ])))/10
                 for (i in 1:5) symbols(0, 0, circles = radio *
                   i, add = TRUE, inches = FALSE, fg = "black")
             }
-        }
-        if (TypeGraph == 5) {
+        },
+        
+        # Compara dos genotipos
+        
+        "5" = {
             text(coordenviroment[, dimension1], coordenviroment[,
                 dimension2], labels = labelenv, col = colenv)
             text(coordgenotype[, dimension1], coordgenotype[,
@@ -393,13 +427,16 @@ function (Data)
             segments(coordgenotype[vgenotype1, dimension1], coordgenotype[vgenotype1,
                 dimension2], coordgenotype[vgenotype2, dimension1],
                 coordgenotype[vgenotype2, dimension2], col = "red",
-                lty = "solid")
+                lty = "solid", lwd = 2.5)
             abline(a = 0, b = -(coordgenotype[vgenotype1, dimension1] -
                 coordgenotype[vgenotype2, dimension1])/(coordgenotype[vgenotype1,
                 dimension2] - coordgenotype[vgenotype2, dimension2]),
-                col = "red", lty = "solid")
-        }
-        if (TypeGraph == 6) {
+                col = "red", lty = "solid",lwd = 2.5)
+        },
+        
+        # Which-won-where
+        
+        "6" = {
             points(coordgenotype[, dimension1], coordgenotype[,
                 dimension2], pch = symbol, col = colgenotype)
             text(coordgenotype[, dimension1], coordgenotype[,
@@ -422,7 +459,7 @@ function (Data)
               xint<--c2/(m-mperp)
               xint<-ifelse(xint<0,min(coordenviroment[, dimension1],coordgenotype[, dimension1]), max(coordenviroment[, dimension1],coordgenotype[, dimension1]))
               yint<-mperp*xint
-              segments(0,0, xint,yint, col="red", lty="solid")
+              segments(0,0, xint,yint, col="red", lty="solid",lwd=2.5)
               i <<- i + 1
             }
             m<-(coordgenotype[indice[i], dimension2] - coordgenotype[indice[1], dimension2])/(coordgenotype[indice[i],dimension1]-coordgenotype[indice[1],dimension1])
@@ -431,9 +468,12 @@ function (Data)
             xint<--c2/(m-mperp)
             xint<-ifelse(xint<0,min(coordenviroment[, dimension1],coordgenotype[, dimension1]), max(coordenviroment[, dimension1],coordgenotype[, dimension1]))
             yint<-mperp*xint
-            segments(0,0, xint,yint, col="red", lty="solid")
-        }
-        if (TypeGraph == 7) {
+            segments(0,0, xint,yint, col="red", lty="solid",lwd=2.5)
+        },
+        
+        # Discrimitiveness vs. representativenss
+        
+        "7" = {
             text(coordgenotype[, dimension1], coordgenotype[,
                 dimension2], labels = labelgen, col = colgenotype,
                 cex = 1)
@@ -451,20 +491,23 @@ function (Data)
                 dimension2]), circles = 0.1, add = TRUE, inches = FALSE,
                 fg = colenv)
             abline(a = 0, b = mean(coordenviroment[, dimension2])/mean(coordenviroment[,
-                dimension1]), col = colenv, lty = "solid", cex = 2.5)
+                dimension1]), col = colenv, lty = "solid", lwd = 2.5)
             radio <<- max((max(coordenviroment[dimension1, ]) -
                 min(coordenviroment[dimension1, ])), (max(coordenviroment[dimension2,
                 ]) - min(coordenviroment[dimension2, ])))/10
             for (i in 1:5) symbols(0, 0, circles = radio * i,
                 add = TRUE, inches = FALSE, fg = "black")
-        }
-        if (TypeGraph == 9) {
+        },
+        
+        # Mean vs. Stability
+        
+        "9" = {
             med1 <<- mean(coordenviroment[, dimension1])
             med2 <<- mean(coordenviroment[, dimension2])
             abline(a = 0, b = med2/med1, col = colgenotype, lty = "solid",
-                cex = 2.5)
+                lwd = 2.5)
             abline(a = 0, b = -med1/med2, col = colgenotype,
-                lty = "solid", cex = 2.5)
+                lty = "solid", lwd = 2.5)
             arrows(centro[1], centro[2], med1, med2, col = colgenotype,
                 lty = "solid", length = 0.1)
             text(coordgenotype[, dimension1], coordgenotype[,
@@ -475,7 +518,8 @@ function (Data)
                 cex = 1)
             symbols(med1, med2, circles = 0.1, add = TRUE, inches = FALSE,
                 fg = colenv)
-            for (i in 1:nrow(matrixdata)) {
+            for (i in 1:nrow(matrixdata)) 
+            {
                 x <- solve(matrix(c(-med2, med1, med1, med2),
                   nrow = 2), matrix(c(0, med2 * coordgenotype[i,
                   dimension2] + med1 * coordgenotype[i, dimension1]),
@@ -483,8 +527,11 @@ function (Data)
                 segments(coordgenotype[i, dimension1], coordgenotype[i,
                   dimension2], x[1], x[2], lty = "dotted")
             }
-        }
-        if (TypeGraph == 8) {
+        },
+        
+        # Ranking Environments
+        
+        "8" = {
             points(coordgenotype[, dimension1], coordgenotype[,
                 dimension2], col = colgenotype, cex = 1)
             points(centro[1], centro[2], pch = 18, col = "black")
@@ -494,9 +541,9 @@ function (Data)
             med1 <<- mean(coordenviroment[, dimension1])
             med2 <<- mean(coordenviroment[, dimension2])
             abline(a = 0, b = med2/med1, col = colenv, lty = "solid",
-                cex = 2.5)
+                lwd = 2.5)
             abline(a = 0, b = -med1/med2, col = colenv, lty = "solid",
-                cex = 2.5)
+                lwd = 2.5)
             symbols(med1, med2, circles = 0.1, add = TRUE, inches = FALSE,
                 fg = colenv)
             mod <<- max((coordenviroment[, dimension1]^2 + coordenviroment[,
@@ -508,14 +555,17 @@ function (Data)
             radio <<- ((xcoord - med1)^2 + (ycoord - med2)^2)^0.5/3
             for (i in 1:8) symbols(xcoord, ycoord, circles = radio *
                 i, add = TRUE, inches = FALSE, fg = "gray")
-        }
-        if (TypeGraph == 10) {
+        },
+        
+        # Ranking Environments
+        
+        "10" = {
             med1 <<- mean(coordenviroment[, dimension1])
             med2 <<- mean(coordenviroment[, dimension2])
             abline(a = 0, b = med2/med1, col = colgenotype, lty = "solid",
-                cex = 2.5)
+                lwd = 2.5)
             abline(a = 0, b = -med1/med2, col = colgenotype,
-                lty = "solid", cex = 2.5)
+                lty = "solid", lwd = 2.5)
             text(coordgenotype[, dimension1], coordgenotype[,
                 dimension2], labels = labelgen, col = colgenotype,
                 cex = 1)
@@ -541,7 +591,7 @@ function (Data)
             radio <<- ((coordx - med1)^2 + (coordy - med2)^2)^0.5/3
             for (i in 1:10) symbols(coordx, coordy, circles = radio *
                 i, add = TRUE, inches = FALSE, fg = "gray")
-        }
+        })
     }
     Biplot3D <- function() {
         dimensions <- 1:3
@@ -1054,7 +1104,8 @@ function (Data)
       tkadd(menuBiplotTools, "command", label = "Which Won Where/What",
             command = function() 
             {
-              TypeGraph <<- 6
+              TypeGraph <<- 6     
+              wintitle <<- "Which Won Where/What"
               tkentryconfigure(menuView, 2, state = "disabled")
               tkentryconfigure(menuView, 1, state = "disabled")
               tkrreplot(img)
@@ -1105,6 +1156,7 @@ function (Data)
               TypeGraph <<- 1
               Models()
               showboth <- tclVar("0")
+              wintitle <- "GGE Biplot"              
               tkentryconfigure(menuBiplotTools, 0, state = "normal")
               tkentryconfigure(menuView, 2, state = "normal")
               tkentryconfigure(menuView, 1, state = "normal")
