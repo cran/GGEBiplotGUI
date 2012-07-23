@@ -35,8 +35,6 @@ function (Data)
     matrixdata <- NULL
     coordgenotype <- NULL
     coordenviroment <- NULL
-    labelenv <- NULL
-    labelgen <- NULL
     venvironment <- -1
     vgenotype <- -1
     vgenotype1 <- -1
@@ -82,14 +80,13 @@ function (Data)
             return(colorv)
     }
     Models <- function() {
-        labelgen <<- Data[, 1]
-        labelenv <<- colnames(Data[, -1])
-        matrixdata <<- matrix(, nrow(Data), ncol(Data) - 1)
+        labelgen <<- rownames(Data)
+        labelenv <<- colnames(Data)
+        matrixdata <<- matrix(, nrow(Data), ncol(Data))
         for (i in 1:nrow(matrixdata)) for (j in 1:ncol(matrixdata)) matrixdata[i,
-            j] <<- Data[i, j + 1]
+            j] <<- Data[i, j]
         for (i in 1:ncol(diag(svd(matrixdata)$d))) ejes[i] <<- paste("AXIS",
             i, sep = "")
-            
         # Opción de centrado
             
         switch(optioncentering,        
@@ -529,7 +526,7 @@ function (Data)
             }
         },
         
-        # Ranking Environments
+        # Mean vs. Stability
         
         "8" = {
             points(coordgenotype[, dimension1], coordgenotype[,
@@ -639,7 +636,7 @@ function (Data)
         wingenotype <- tktoplevel()
         tkwm.title(wingenotype, "Select a Genotype")
         combogenotype <- tkwidget(wingenotype, "ComboBox", editable = FALSE,
-            values = levels(labelgen), width = 20)
+            values = labelgen, width = 20)
         onOK <- function() {
             vgenotype <<- as.numeric(tclvalue(tcl(combogenotype,
                 "getvalue"))) + 1
@@ -696,9 +693,9 @@ function (Data)
         vgenotype1 <<- -1
         vgenotype2 <<- -1
         combogenotype1 <- tkwidget(winEnvGen, "ComboBox", editable = FALSE,
-            values = levels(labelgen), width = 20)
+            values = labelgen, width = 20)
         combogenotype2 <- tkwidget(winEnvGen, "ComboBox", editable = FALSE,
-            values = levels(labelgen), width = 20)
+            values = labelgen, width = 20)
         onOK <- function() {
             vgenotype1 <<- as.numeric(tclvalue(tcl(combogenotype1,
                 "getvalue"))) + 1
@@ -1035,10 +1032,8 @@ function (Data)
       tkadd(menuView, "checkbutton", label = "Show/Hide Title", variable = showtitle, 
             command = function() 
             {
-              if (tclvalue(showtitle) == "1")
-                wintitle <<- "GGE Biplot"
-              if (tclvalue(showtitle) == "0")
-                wintitle <<- NULL
+              if (tclvalue(showtitle) == "1") wintitle <<- "GGE Biplot"
+              if (tclvalue(showtitle) == "0") wintitle <<- NULL
               tkrreplot(img)
             })
       tkadd(menuView, "checkbutton", label = "Show/Hide Gidelines", variable = showguidelines, 
@@ -1055,7 +1050,7 @@ function (Data)
                 }
               else 
               {
-                wintitle <<- "Examine a Genotype"
+                if (tclvalue(showtitle) == "1") wintitle <<- "Examine a Genotype"
                 TypeGraph <<- 3
                 tkentryconfigure(menuView, 2, state = "disabled")
                 tkentryconfigure(menuView, 1, state = "disabled")
@@ -1072,7 +1067,7 @@ function (Data)
               else 
                 {
                   TypeGraph <<- 2
-                  wintitle <<- "Examine an Environment"
+                  if (tclvalue(showtitle) == "1") wintitle <<- "Examine an Environment"
                   tkentryconfigure(menuView, 2, state = "disabled")
                   tkentryconfigure(menuView, 1, state = "disabled")
                   tkrreplot(img)
@@ -1084,7 +1079,7 @@ function (Data)
             {
               TypeGraph <<- 4
               showcircles <<- tclVar("1")
-              wintitle <<- "Relationship among environments"
+              if (tclvalue(showtitle) == "1") wintitle <<- "Relationship among environments"
               tkentryconfigure(menuView, 2, state = "disabled")
               tkentryconfigure(menuView, 1, state = "disabled")
               tkrreplot(img)
@@ -1095,7 +1090,7 @@ function (Data)
             {
               SelectTwoGenotype()
               TypeGraph <<- 5
-              wintitle <<- "Compare two Genotypes"
+              if (tclvalue(showtitle) == "1") wintitle <<- "Compare two Genotypes"
               tkentryconfigure(menuView, 2, state = "disabled")
               tkentryconfigure(menuView, 1, state = "disabled")
               tkrreplot(img)
@@ -1105,7 +1100,7 @@ function (Data)
             command = function() 
             {
               TypeGraph <<- 6     
-              wintitle <<- "Which Won Where/What"
+              if (tclvalue(showtitle) == "1") wintitle <<- "Which Won Where/What"
               tkentryconfigure(menuView, 2, state = "disabled")
               tkentryconfigure(menuView, 1, state = "disabled")
               tkrreplot(img)
@@ -1114,7 +1109,7 @@ function (Data)
             command = function() 
             {
               TypeGraph <<- 7
-              wintitle <<- "Discrimitiveness vs. representativenss"
+              if (tclvalue(showtitle) == "1") wintitle <<- "Discrimitiveness vs. representativenss"
               tkentryconfigure(menuView, 2, state = "disabled")
               tkentryconfigure(menuView, 1, state = "disabled")
               tkrreplot(img)
@@ -1122,8 +1117,8 @@ function (Data)
       tkadd(menuBiplotTools, "command", label = "Mean vs. Stability",
             command = function() 
             {
-              wintitle <<- "Mean vs. Stability"
-              TypeGraph <<- 9
+              if (tclvalue(showtitle) == "1") wintitle <<- "Mean vs. Stability"
+              TypeGraph <<- 8
               tkentryconfigure(menuView, 2, state = "disabled")
               tkentryconfigure(menuView, 1, state = "disabled")
               tkrreplot(img)
@@ -1134,8 +1129,8 @@ function (Data)
       tkadd(menuRank, "radiobutton", label = "with ref.to the 'Ideal' Environment",variable = vrank, value = "1", 
             command = function() 
             {
-              TypeGraph <<- 8
-              wintitle <<- "Ranking Environments"
+              TypeGraph <<- 9
+              if (tclvalue(showtitle) == "1") wintitle <<- "Ranking Environments"
               tkentryconfigure(menuView, 2, state = "disabled")
               tkentryconfigure(menuView, 1, state = "disabled")
               tkrreplot(img)
@@ -1144,7 +1139,7 @@ function (Data)
             command = function() 
             {
               TypeGraph <<- 10
-              wintitle <<- "Ranking Genotypes"
+              if (tclvalue(showtitle) == "1") wintitle <<- "Ranking Genotypes"
               tkentryconfigure(menuView, 2, state = "disabled")
               tkentryconfigure(menuView, 1, state = "disabled")
               tkrreplot(img)
@@ -1156,7 +1151,7 @@ function (Data)
               TypeGraph <<- 1
               Models()
               showboth <- tclVar("0")
-              wintitle <- "GGE Biplot"              
+              if (tclvalue(showtitle) == "1") wintitle <- "GGE Biplot"              
               tkentryconfigure(menuBiplotTools, 0, state = "normal")
               tkentryconfigure(menuView, 2, state = "normal")
               tkentryconfigure(menuView, 1, state = "normal")
