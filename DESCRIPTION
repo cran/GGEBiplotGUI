@@ -1,7 +1,7 @@
 Package: GGEBiplotGUI
 Type: Package
 Title: GGEBiplotGUI: Interactive GGE Biplots in R
-Version: 1.0-4
+Version: 1.0-5
 Date: 2012-07-23
 Author: Elisa Frutos Bernal <efb@usal.es>, Purificacion Galindo
         Villardon <pgalindo@usal.es>
@@ -13,7 +13,7 @@ Description: A GUI with which to construct and interact with GGE
         biplots.
 License: GPL (>= 2)
 LazyData: yes
-Packaged: 2013-04-03 11:11:24 UTC; Elisa
+Packaged: 2013-05-01 11:12:23 UTC; Elisa
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2013-04-03 13:25:13
+Date/Publication: 2013-05-01 15:12:32

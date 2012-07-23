@@ -2,3 +2,4 @@
 2012-07-23 vs. 1.0-3 - 	Changes the structure of the data file.
 		  	It solves the problem of choice of menu:Examine a Genotype
 2013-04-03 vs. 1.0-4 -  Changes the DESCRIPTION file to declare BWidget
+2013-04-28 vs. 1.0-5 -  It allows to move the labels, rename and change color. Also it allows to add/remove symbols and change the size of the font.
