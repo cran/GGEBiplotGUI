@@ -1,0 +1,20 @@
+citHeader("To cite GGEBiplotGUI in publications use:")
+
+
+citEntry(entry  = "Manual",
+ title  = "GGEBiplotGUI: Interactive GGE Biplots in R",
+ author = "Elisa Frutos Bernal and
+ Purificacion Galindo Villardon",
+ 
+organization = "Universidad de Salamanca",address = "Salamanca, Spain", year= version$year,
+
+ 
+textVersion = 
+paste("E.Frutos Bernal & P.Galindo Villardon (", version$year, ").",
+"GGEBiplotGUI: Interactive GGE Biplots in R","Salamanca, Spain.",sep=""))
+
+
+citFooter("Lots of time and effort were invested in creating GGEBiplotGUI.",
+          "Please, cite it when using it together with R.",
+          "See also", sQuote("citation()"),
+          "for citing R.")
