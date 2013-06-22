@@ -42,6 +42,7 @@ GGEBiplot <- function (Data)
     vrank <- tclVar("1")
     TypeGraph <- 1
     matrixdata <- NULL
+    desviation <- NULL
     colgenotype <- NULL
     colenv <- NULL
     labelgen <- NULL
@@ -195,7 +196,7 @@ GGEBiplot <- function (Data)
         },
         "1.Std Deviation (SD)" = {
             scaling <<- tclVar("1")
-            desviation = array(, dim = ncol(matrixdata))
+            desviation <<- array(, dim = ncol(matrixdata))
             for (j in 1:ncol(matrixdata)) desviation[j] <<- sqrt(var(matrixdata[,
                 j]))
             for (i in 1:nrow(matrixdata)) for (j in 1:ncol(matrixdata)) matrixdata[i,
