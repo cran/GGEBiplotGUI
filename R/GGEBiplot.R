@@ -1,13 +1,5 @@
 GGEBiplot <- function (Data)
 {
-
-    ###########
-    # Librerias
-    ###########
-    
-    require(tcltk)
-    library(tkrplot)
-    library(rgl)    
     tclRequire("BWidget")
     ###########
     # Variables
@@ -631,7 +623,7 @@ GGEBiplot <- function (Data)
             colorsVec <<- colenv
         },
         
-        # Ranking Genotypes
+        # Mean vs Stability
         
         "9" = {
             points(coordgenotype[, dimension1], coordgenotype[,
@@ -664,7 +656,7 @@ GGEBiplot <- function (Data)
         },
         
         
-        # Mean vs Stability
+        # Ranking genotypes
         
         "10" = {
             points(coordgenotype[, dimension1], coordgenotype[,
@@ -889,17 +881,17 @@ GGEBiplot <- function (Data)
     # Guarda la imagen con formato Metafile
     ####################################### 
         
-    SaveFileMetafile <- function() {
-        FileName <- tclvalue(tkgetSaveFile(filetypes = "{{Metafiles} {.wmf}} {{All files} *}"))
-        if (nchar(FileName)) {
-            nn <- nchar(FileName)
-            if (nn < 5 || substr(FileName, nn - 3, nn) != ".wmf")
-                FileName <- paste(FileName, ".wmf", sep = "")
-            win.metafile(FileName, width = 8, height = 8, restoreConsole = FALSE)
-            plotFunctiond(screen = FALSE)
-            dev.off()
-        }
-    }
+#    SaveFileMetafile <- function() {
+#        FileName <- tclvalue(tkgetSaveFile(filetypes = "{{Metafiles} {.wmf}} {{All files} *}"))
+#        if (nchar(FileName)) {
+#            nn <- nchar(FileName)
+#            if (nn < 5 || substr(FileName, nn - 3, nn) != ".wmf")
+#                FileName <- paste(FileName, ".wmf", sep = "")
+#            win.metafile(FileName, width = 8, height = 8, restoreConsole = FALSE)
+#            plotFunctiond(screen = FALSE)
+#            dev.off()
+#        }
+#    }
     
     #########################################
     # Guarda la imagen con formato postscript
@@ -970,13 +962,14 @@ GGEBiplot <- function (Data)
             dev.off()
         }
     }
-    Print <- function() {
-        try(win.print(), silent = TRUE)
-        if (geterrmessage() != "Error in win.print() : unable to start device devWindows\n") {
-            plotFunctiond(screen = FALSE)
-            dev.off()
-        }
-    }
+#    Print <- function() {
+
+        #try(win.print(), silent = TRUE)
+        #if (geterrmessage() != "Error in win.print() : unable to start device devWindows\n") {
+        #    plotFunctiond(screen = FALSE)
+        #    dev.off()
+        #}
+#    }
     #
     # Pantalla principal
     #
@@ -1037,11 +1030,11 @@ GGEBiplot <- function (Data)
             {
               SaveFilePostscript()
             })
-      tkadd(menuSaveAs, "command", label = "Metafile",
-            command = function() 
-            {
-              SaveFileMetafile()
-            })
+#      tkadd(menuSaveAs, "command", label = "Metafile",
+#            command = function() 
+#            {
+#              SaveFileMetafile()
+#            })
       tkadd(menuSaveAs, "command", label = "Bmp file",
             command = function() 
             {
@@ -1062,11 +1055,11 @@ GGEBiplot <- function (Data)
             {
               SaveFileTeX()
             })
-      tkadd(menuFile, "command", label = "Print image",
-            command = function() 
-            {
-              Print()
-            })
+#      tkadd(menuFile, "command", label = "Print image",
+#            command = function() 
+#            {
+#              Print()
+#            })
       tkadd(menuFile, "separator")
       tkadd(menuFile, "command", label = "Exit", 
             command = function() 
@@ -1305,7 +1298,7 @@ GGEBiplot <- function (Data)
             command = function() 
             {
               if (tclvalue(showtitle) == "1") wintitle <<- "Mean vs. Stability"
-              TypeGraph <<- 8
+              TypeGraph <<- 9
               tkentryconfigure(menuView, 2, state = "disabled")
               tkentryconfigure(menuView, 1, state = "disabled")
               tkrreplot(img)
@@ -1316,7 +1309,7 @@ GGEBiplot <- function (Data)
       tkadd(menuRank, "radiobutton", label = "with ref.to the 'Ideal' Environment",variable = vrank, value = "1", 
             command = function() 
             {
-              TypeGraph <<- 9
+              TypeGraph <<- 8
               if (tclvalue(showtitle) == "1") wintitle <<- "Ranking Environments"
               tkentryconfigure(menuView, 2, state = "disabled")
               tkentryconfigure(menuView, 1, state = "disabled")

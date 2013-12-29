@@ -8,8 +8,8 @@
 \tabular{ll}{
 Package: \tab GGEBiplotGUI\cr
 Type: \tab Package\cr
-Version: \tab 1.0-3\cr
-Date: \tab 2012-07-23\cr
+Version: \tab 1.0-7\cr
+Date: \tab 2013-01-13\cr
 License: \tab  GPL (>=2)\cr
 }
 The GGEBiplotGUI package
