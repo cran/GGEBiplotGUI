@@ -1,20 +1,9 @@
-citHeader("To cite GGEBiplotGUI in publications use:")
+citHeader("Citation for the GGEBiplotGUI package:")
 
-
-citEntry(entry  = "Manual",
- title  = "GGEBiplotGUI: Interactive GGE Biplots in R",
- author = "Elisa Frutos Bernal and
- Purificacion Galindo Villardon",
- 
-organization = "Universidad de Salamanca",address = "Salamanca, Spain", year= version$year,
-
- 
-textVersion = 
-paste("E.Frutos Bernal & P.Galindo Villardon (", version$year, ").",
-"GGEBiplotGUI: Interactive GGE Biplots in R","Salamanca, Spain.",sep=""))
-
-
-citFooter("Lots of time and effort were invested in creating GGEBiplotGUI.",
-          "Please, cite it when using it together with R.",
-          "See also", sQuote("citation()"),
-          "for citing R.")
+citEntry(
+ entry = "Article",
+ title = "An interactive biplot implementation in R for modeling genotype-by-environment interaction",
+ journal = "Stochastic Environmental Research and Risk Assessment",
+ year = "2013",
+ author = "Frutos E and Galindo MP and Leiva V",
+ textVersion = "Frutos, E., Galindo, M.P., Leiva, V. An interactive biplot implementation in R for modeling genotype-by-environment interaction. Stochastic Environmental Research and Risk Assessment (in press)." )

@@ -1,1 +1,3 @@
-exportPattern("^[[:alpha:]]+")
+export(GGEBiplot)
+import(rgl,tkrplot) 
+
