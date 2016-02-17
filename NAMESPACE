@@ -1,3 +1,9 @@
 export(GGEBiplot)
-import(rgl,tkrplot) 
+import(rgl,tkrplot,tcltk) 
+importFrom("grDevices", "bmp", "chull", "dev.off", "jpeg", "pdf",
+             "pictex", "png", "postscript")
+importFrom("graphics", "abline", "arrows", "par", "plot", "points",
+             "polygon", "segments", "symbols", "text")
+importFrom("stats", "var")
+importFrom("utils", "write.table")
 

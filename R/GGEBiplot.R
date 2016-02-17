@@ -98,7 +98,7 @@ GGEBiplot <- function (Data)
     }
        
     #############################
-    # Función que cambia el color
+    # Funcion que cambia el color
     ############################# 
     
     ChangeColorv <- function(color) {
@@ -109,7 +109,7 @@ GGEBiplot <- function (Data)
     }
                             
     ##########################################
-    # Función que cambia el tamaño de la letra
+    # Funcion que cambia el tamano de la letra
     ##########################################
     
     ChangeSize <- function()
@@ -139,7 +139,7 @@ GGEBiplot <- function (Data)
     }
     
     ######################################
-    # Función para la selección del modelo
+    # Funcion para la seleccion del modelo
     ######################################     
     
     Models <- function() {        
@@ -153,7 +153,7 @@ GGEBiplot <- function (Data)
         for (i in 1:ncol(diag(svd(matrixdata)$d))) ejes[i] <<- paste("AXIS",
             i, sep = "")
             
-        # Opción de centrado
+        # Opcion de centrado
             
         switch(optioncentering,        
         "0.No centering" = {
@@ -180,7 +180,7 @@ GGEBiplot <- function (Data)
             centering <<- tclVar("3")
         })
         
-        # Opción de escalado
+        # Opcion de escalado
         
         switch (optionscaling,
         "0.No scaling" = {
@@ -195,7 +195,7 @@ GGEBiplot <- function (Data)
                 j] <<- matrixdata[i, j]/desviation[j]
         })
         
-        # Opción de centrado
+        # Opcion de centrado
         
         switch (optionSVP,
         "JK -(Row Metric Preserving)" = {
@@ -239,7 +239,7 @@ GGEBiplot <- function (Data)
     }
     
     # #######################################
-    # Función que construye el fichero de log
+    # Funcion que construye el fichero de log
     #########################################     
     
     Addfile <- function() {
@@ -351,7 +351,7 @@ GGEBiplot <- function (Data)
     }
     
     ##################################
-    # Función que construye el gráfico
+    # Funcion que construye el grafico
     ##################################     
     
     plotFunctiond <- function(screen = TRUE) {
@@ -372,7 +372,7 @@ GGEBiplot <- function (Data)
         indexLabeledaux<-c()
         labeledPoints <- list()    
         
-        # Tipo de gráfico
+        # Tipo de grafico
         #        
         switch(TypeGraph,   
         
@@ -479,7 +479,7 @@ GGEBiplot <- function (Data)
             }
         },              
         
-        # Relación entre ambientes
+        # Relacion entre ambientes
         
         "4" = {
             arrows(centro[1], centro[2], coordenviroment[, dimension1],
@@ -756,7 +756,7 @@ GGEBiplot <- function (Data)
     }                                     
     
     ######################################
-    # Pantalla de selección de un genotipo
+    # Pantalla de seleccion de un genotipo
     ######################################
     
     SelectGenotype <- function() {
@@ -788,7 +788,7 @@ GGEBiplot <- function (Data)
     }
     
     ####################################
-    # Pantalla de selección de ambientes
+    # Pantalla de seleccion de ambientes
     ####################################
     
     SelectEnvironment <- function() {
@@ -821,7 +821,7 @@ GGEBiplot <- function (Data)
     }
     
     #############################################
-    # Pantalla para la selección de dos genotipos
+    # Pantalla para la seleccion de dos genotipos
     ############################################# 
     
     SelectTwoGenotype <- function() {
